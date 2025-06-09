@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-exec tincd -n netname -D -d3
+exec tincd -n netlabssir -D -d3
