@@ -1,0 +1,66 @@
+services:
+  server_01:
+    build: .
+    container_name: server_01
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./server_01:/etc/tinc/netlabssir
+      - shared-hosts:/shared
+    environment:
+      - NODE_NAME=server_01
+    networks:
+      lan:
+        ipv4_address: 192.168.175.10
+      wan:
+        ipv4_address: 10.13.37.5
+
+  client_01:
+    build: .
+    container_name: client_01
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./client_01:/etc/tinc/netlabssir
+      - shared-hosts:/shared
+    environment:
+      - NODE_NAME=client_01
+    networks:
+      lan:
+        ipv4_address: 192.168.175.20
+
+  client_02:
+    build: .
+    container_name: client_02
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./client_02:/etc/tinc/netlabssir
+      - shared-hosts:/shared
+    environment:
+      - NODE_NAME=client_02
+    networks:
+      wan:
+        ipv4_address: 10.13.37.10
+
+volumes:
+  shared-hosts:
+
+networks:
+  lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.175.0/24
+
+  wan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.13.37.0/24
